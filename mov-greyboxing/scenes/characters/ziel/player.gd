@@ -24,6 +24,19 @@ extends CharacterBody3D
 @export var gravedad: float = 12.0
 @export var gravedad_maxima: float = 25.0
 
+# --- Doble salto ---
+## Cantidad de saltos adicionales permitidos en el aire (1 = doble salto clásico).
+@export var saltos_en_el_aire: int = 1
+
+# --- Salto de pared (wall jump) ---
+## RayCast3D asignado en el Inspector, apuntando hacia adelante del personaje.
+## Debe tener enabled = true y su largo/target_position ajustado a la distancia
+## de detección deseada (ej. Vector3(0, 0, -0.6)).
+@export var raycast_pared_path: NodePath
+@export var fuerza_salto_pared_y: float = 4.5  # impulso vertical al saltar de una pared
+@export var empuje_pared: float = 4.5  # impulso horizontal alejándose de la pared
+var raycast_pared: RayCast3D
+
 # --- Blend de entrada al salto (SaltoBlend en el AnimationTree) ---
 @export var duracion_blend_salto: float = 0.12  # segundos que tarda en pasar de Locomocion a RunJumping
 
@@ -64,6 +77,8 @@ const FRAMES_CONFIRMACION_PISO: int = 3
 var _tiempo_en_el_aire: float = 0.0  # acumulador para rampear SaltoBlend/blend_amount
 var _blend_position_suavizado: float = 0.0  # valor amortiguado que se manda al BlendSpace1D
 
+var _saltos_restantes: int = 0  # saltos en el aire disponibles (doble salto)
+
 
 func _ready() -> void:
 	if animation_tree_path != NodePath():
@@ -75,6 +90,13 @@ func _ready() -> void:
 		camara_rig = get_node(camara_rig_path)
 	else:
 		push_warning("jugador.gd: falta asignar camara_rig_path en el inspector.")
+
+	if raycast_pared_path != NodePath():
+		raycast_pared = get_node(raycast_pared_path)
+	else:
+		push_warning("jugador.gd: falta asignar raycast_pared_path en el inspector (salto de pared desactivado).")
+
+	_saltos_restantes = saltos_en_el_aire
 
 
 func _physics_process(delta: float) -> void:
@@ -125,9 +147,36 @@ func _rotar_hacia(direccion: Vector3, delta: float) -> void:
 
 
 func _procesar_salto() -> void:
-	if is_on_floor() and Input.is_action_just_pressed("saltar"):
+	# Al tocar el piso se reinician tanto el contador de doble salto
+	# como (implícitamente) la posibilidad de encadenar un wall jump.
+	if is_on_floor():
+		_saltos_restantes = saltos_en_el_aire
+
+	if not Input.is_action_just_pressed("saltar"):
+		return
+
+	if is_on_floor():
 		velocity.y = fuerza_salto
 		frames_en_el_piso = 0
+		return
+
+	# En el aire: prioridad al salto de pared si hay una pared detectada.
+	if _detectando_pared():
+		var normal_pared: Vector3 = raycast_pared.get_collision_normal()
+		velocity.y = fuerza_salto_pared_y
+		velocity.x = normal_pared.x * empuje_pared
+		velocity.z = normal_pared.z * empuje_pared
+		_saltos_restantes = saltos_en_el_aire  # reinicia el doble salto
+		return
+
+	# Si no hay pared, se consume un salto en el aire (doble salto).
+	if _saltos_restantes > 0:
+		velocity.y = fuerza_salto
+		_saltos_restantes -= 1
+
+
+func _detectando_pared() -> bool:
+	return raycast_pared != null and raycast_pared.enabled and raycast_pared.is_colliding()
 
 
 func _actualizar_estado(delta: float) -> void:

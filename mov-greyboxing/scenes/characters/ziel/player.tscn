@@ -4,9 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b1j5g5y5jfdcg" path="res://scenes/characters/ziel/ziel.tscn" id="2_5l015"]
 [ext_resource type="Script" uid="uid://b4hrpa5lrw1d" path="res://scenes/camera/camera_player.gd" id="3_7q3eu"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ger57"]
-radius = 0.15673828
-height = 1.5715332
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0vi6b"]
 
 [node name="Player" type="CharacterBody3D" unique_id=804888260 groups=["jugador"]]
 floor_snap_length = 0.3
@@ -15,11 +13,9 @@ velocidad_caminar = 4.0
 velocidad_correr = 22.0
 aceleracion = 22.0
 fuerza_salto = 8.0
+altura_paso_maxima = 10.0
+velocidad_subida_escalon = 12.0
 camara_rig_path = NodePath("CameraPivote")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1175448145]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7628174, 0.109707)
-shape = SubResource("CapsuleShape3D_ger57")
 
 [node name="Ziel" parent="." unique_id=5566209 instance=ExtResource("2_5l015")]
 
@@ -32,3 +28,7 @@ collision_mask = 0
 spring_length = 2.5
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivote/SpringArm3D" unique_id=333827145]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1216508874]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_0vi6b")

@@ -37,6 +37,24 @@ extends CharacterBody3D
 @export var empuje_pared: float = 4.5  # impulso horizontal alejándose de la pared
 var raycast_pared: RayCast3D
 
+# --- Subida de escalones ---
+## Dos RayCast3D apuntando hacia adelante (misma dirección, distinta altura):
+## - raycast_escalon_bajo: a la altura de los pies (ej. y = 0.05 local),
+##   detecta el "borde" del escalón.
+## - raycast_escalon_alto: a la altura máxima de escalón que se puede subir
+##   (ej. y = altura_paso_maxima local). Si ESTE no choca pero el de abajo sí,
+##   el obstáculo es lo bastante bajo como para subirlo caminando.
+## Ambos deben tener enabled = true, mismo target_position (largo) y mismo
+## collision_mask que el resto de los raycasts del personaje.
+@export var raycast_escalon_bajo_path: NodePath
+@export var raycast_escalon_alto_path: NodePath
+@export var altura_paso_maxima: float = 0.4
+@export var velocidad_subida_escalon: float = 8.0
+var raycast_escalon_bajo: RayCast3D
+var raycast_escalon_alto: RayCast3D
+var _subiendo_escalon: bool = false
+var _y_objetivo_escalon: float = 0.0
+
 # --- Blend de entrada al salto (SaltoBlend en el AnimationTree) ---
 @export var duracion_blend_salto: float = 0.12  # segundos que tarda en pasar de Locomocion a RunJumping
 
@@ -96,12 +114,19 @@ func _ready() -> void:
 	else:
 		push_warning("jugador.gd: falta asignar raycast_pared_path en el inspector (salto de pared desactivado).")
 
+	if raycast_escalon_bajo_path != NodePath() and raycast_escalon_alto_path != NodePath():
+		raycast_escalon_bajo = get_node(raycast_escalon_bajo_path)
+		raycast_escalon_alto = get_node(raycast_escalon_alto_path)
+	else:
+		push_warning("jugador.gd: faltan raycast_escalon_bajo_path / raycast_escalon_alto_path (subida de escalones desactivada).")
+
 	_saltos_restantes = saltos_en_el_aire
 
 
 func _physics_process(delta: float) -> void:
 	_aplicar_gravedad(delta)
 	_procesar_movimiento(delta)
+	_procesar_escalones(delta)
 	_procesar_salto()
 	_actualizar_estado(delta)
 	_reproducir_estado(delta)
@@ -144,6 +169,45 @@ func _procesar_movimiento(delta: float) -> void:
 func _rotar_hacia(direccion: Vector3, delta: float) -> void:
 	var angulo_objetivo: float = atan2(direccion.x, direccion.z)
 	rotation.y = lerp_angle(rotation.y, angulo_objetivo, velocidad_rotacion * delta)
+
+
+func _procesar_escalones(delta: float) -> void:
+	if raycast_escalon_bajo == null or raycast_escalon_alto == null:
+		return
+
+	if not is_on_floor():
+		_subiendo_escalon = false
+		return
+
+	var hay_movimiento: bool = Vector2(velocity.x, velocity.z).length() > 0.1
+
+	# Escalón "subible": algo bloquea a la altura de los pies pero no a la
+	# altura máxima permitida -> el obstáculo es lo bastante bajo.
+	var escalon_detectado: bool = (
+		hay_movimiento
+		and raycast_escalon_bajo.is_colliding()
+		and not raycast_escalon_alto.is_colliding()
+	)
+
+	if escalon_detectado and not _subiendo_escalon:
+		_subiendo_escalon = true
+		# Objetivo fijo (no se recalcula cuadro a cuadro) para no seguir
+		# subiendo indefinidamente mientras el raycast bajo siga chocando.
+		_y_objetivo_escalon = global_position.y + altura_paso_maxima
+
+	if not _subiendo_escalon:
+		return
+
+	global_position.y = move_toward(
+		global_position.y, _y_objetivo_escalon, velocidad_subida_escalon * delta
+	)
+
+	# Se corta la subida al llegar al objetivo, o antes si el pie ya dejó
+	# de chocar (significa que se despejó el borde del escalón): en ambos
+	# casos el resto lo resuelve move_and_slide + el snap al piso normal.
+	var llego_al_objetivo: bool = is_equal_approx(global_position.y, _y_objetivo_escalon)
+	if llego_al_objetivo or not raycast_escalon_bajo.is_colliding():
+		_subiendo_escalon = false
 
 
 func _procesar_salto() -> void:

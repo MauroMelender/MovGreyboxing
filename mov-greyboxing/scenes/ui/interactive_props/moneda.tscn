@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://do5fhvayectva"]
+
+[ext_resource type="Material" uid="uid://n32k31xtq85t" path="res://assets/materials/Tex_TestCyan512.tres" id="1_oc0tx"]
+[ext_resource type="Script" uid="uid://c3yrkhkk435d" path="res://scenes/ui/interactive_props/moneda.gd" id="1_yh1ux"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0vi6b"]
+height = 0.10498047
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0vi6b"]
+radius = 0.7419897
+
+[node name="Moneda" type="Area3D" unique_id=472592820]
+script = ExtResource("1_yh1ux")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=203454031]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.0017089844, 7.4701356e-11, 0)
+material_override = ExtResource("1_oc0tx")
+mesh = SubResource("CylinderMesh_0vi6b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=539800528]
+shape = SubResource("SphereShape3D_0vi6b")

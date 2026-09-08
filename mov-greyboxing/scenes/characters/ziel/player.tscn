@@ -8,7 +8,7 @@
 radius = 0.15673828
 height = 1.5715332
 
-[node name="Player" type="CharacterBody3D" unique_id=804888260]
+[node name="Player" type="CharacterBody3D" unique_id=804888260 groups=["jugador"]]
 floor_snap_length = 0.3
 script = ExtResource("1_5l015")
 velocidad_caminar = 4.0

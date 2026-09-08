@@ -27,7 +27,43 @@ surface_material_override/0 = ExtResource("1_ywi28")
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=116147768]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 1.5623988, 13.157268)
+use_collision = true
 polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 1, 4, -1)
+depth = 5.0
+material = ExtResource("1_ywi28")
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=757533913]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5, 1.5623988, 13.157268)
+use_collision = true
+polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 3, 4, -1)
+depth = 5.0
+material = ExtResource("1_ywi28")
+
+[node name="CSGPolygon3D3" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=1006066185]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 1.5623988, 13.157268)
+use_collision = true
+polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 5, 4, -1)
+depth = 5.0
+material = ExtResource("1_ywi28")
+
+[node name="CSGPolygon3D4" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=1466809151]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 3.562399, 19.157269)
+use_collision = true
+polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 1, 4, -1)
+depth = 5.0
+material = ExtResource("1_ywi28")
+
+[node name="CSGPolygon3D5" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=712365952]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5, 5.562399, 19.157269)
+use_collision = true
+polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 3, 4, -1)
+depth = 5.0
+material = ExtResource("1_ywi28")
+
+[node name="CSGPolygon3D6" type="CSGPolygon3D" parent="Escenario/Floor" unique_id=1767382469]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10, 7.562399, 19.157269)
+use_collision = true
+polygon = PackedVector2Array(-2, -1, -2, -1, -2, -1, -2, 5, 4, -1)
 depth = 5.0
 material = ExtResource("1_ywi28")
 

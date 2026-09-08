@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bsw3ndeu3gqvs"]
+
+[ext_resource type="Texture2D" uid="uid://rkkhi7qyf21e" path="res://assets/models/characters/ziel/Ziel.v5_Tex_Z_BaseBody.png" id="1_827ou"]
+[ext_resource type="Shader" uid="uid://dftji8bt5fipf" path="res://assets/shaders/ziel.gdshader" id="1_qxleg"]
+[ext_resource type="Texture2D" uid="uid://b4kf0ejlmac5d" path="res://assets/models/characters/ziel/Ziel.v5_Z_Scars.png" id="2_qxleg"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qxleg")
+shader_parameter/textura_base = ExtResource("1_827ou")
+shader_parameter/textura_detalle = ExtResource("2_qxleg")
+shader_parameter/usar_detalle = true
+shader_parameter/color_sombra = Color(0.55, 0.55, 0.68, 1)
+shader_parameter/umbral_sombra = 0.5
+shader_parameter/suavizado_banda = 0.03
+shader_parameter/color_rim = Color(1, 1, 1, 1)
+shader_parameter/ancho_rim = 0.35
+shader_parameter/intensidad_rim = 0.8

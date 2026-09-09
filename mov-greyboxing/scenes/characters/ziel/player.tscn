@@ -12,7 +12,6 @@ floor_snap_length = 0.3
 script = ExtResource("1_5l015")
 velocidad_caminar = 4.0
 velocidad_correr = 18.0
-friccion = 1.0
 velocidad_rotacion = 20.0
 fuerza_salto = 8.0
 raycast_pared_path = NodePath("RaycastPared")

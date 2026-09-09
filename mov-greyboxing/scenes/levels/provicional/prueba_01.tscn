@@ -826,7 +826,7 @@ surface_material_override/0 = ExtResource("4_ainfm")
 shape = SubResource("ConcavePolygonShape3D_skoht")
 
 [node name="TuboD" type="MeshInstance3D" parent="Scenary" unique_id=2009492988]
-transform = Transform3D(10.896392, 0, 0.7281345, 0, 10.91718, 0, -0.67339325, 0, 11.782179, -60.02134, -5.0031986, -66.245514)
+transform = Transform3D(10.896392, 0, 0.7281345, 0, 10.91718, 0, -0.67339325, 0, 11.782179, -63.045803, -9.133084, -66.245514)
 mesh = SubResource("ArrayMesh_80gca")
 surface_material_override/0 = ExtResource("2_kncmv")
 

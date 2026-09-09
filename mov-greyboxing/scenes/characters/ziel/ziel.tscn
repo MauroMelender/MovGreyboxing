@@ -6,6 +6,8 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0vi6b"]
 
+[sub_resource type="PrismMesh" id="PrismMesh_agyee"]
+
 [node name="Ziel" type="Node3D" unique_id=5566209]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1599477788]
@@ -15,4 +17,9 @@ shape = SubResource("CapsuleShape3D_0vi6b")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=63222058]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.90606046, 0)
 mesh = SubResource("CapsuleMesh_0vi6b")
+surface_material_override/0 = ExtResource("1_agyee")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=127502044]
+transform = Transform3D(5.3541313e-15, -4.5197577e-08, -0.255, -0.98, -4.5197577e-08, 0, -4.283716e-08, 1.034, -1.1146404e-08, 0, 1.391, 0.5596837)
+mesh = SubResource("PrismMesh_agyee")
 surface_material_override/0 = ExtResource("1_agyee")
